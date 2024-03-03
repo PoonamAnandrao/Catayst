@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #c0cdd9; 
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .nav-link {
+            color: #050606;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .logout-link {
+            color: #dc3545;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        .content-container {
+            margin-top: 20px;
+        }
+        
+        .messages-container {
+            width: 300px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container mt-4">
+    <div class="navbar">
+        <div>
+            <a class="nav-link" href="#" onclick="loadContent('{% url 'file_upload' %}', 'dynamic-content')">Uploaded Data</a>
+            <a class="nav-link" href="{% url 'filter_page' %}">Query Builder</a>
+            <a class="nav-link" href="{% url 'user_details' %}">Users</a>
+        </div>
+        <div>
+            <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+
+    <div class="messages-container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="content-container" id="dynamic-content">
+        {% block content %}{% endblock %}
+    </div>
+
+</div>
+
+<script>
+    function loadContent(url, target) {
+        fetch(url)
+            .then(response => response.text())
+            .then(html => document.getElementById(target).innerHTML = html)
+            .catch(error => console.error('Error fetching content:', error));
+    }
+</script>
+</body>
+</html>

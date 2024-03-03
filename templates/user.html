@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}User Details - Your Web App{% endblock %}
+
+{% block content %}
+    <div style="display: flex; flex-direction: column; align-items: center;">
+
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 70%;">
+            <h2 style="margin-bottom: 10px;">Users</h2>
+            <button type="button" style="background-color: #007bff; color: #fff; border: none; padding: 5px 10px; cursor: pointer;" onclick="openAddUserForm()">
+                Add User
+            </button>
+        </div>
+
+        {% if user and user.is_active %}
+            <hr style="width: 70%; border: 1px solid #f8f5f5; margin-top: 20px; margin-bottom: 20px;">
+            
+            <table class="table table-bordered text-center" style="width: 80%;">
+                <tbody>
+                    {% for user in users %}
+                        <!-- <tr> -->
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{% if user.is_active %}Active{% else %}Inactive{% endif %}</td>
+                            <td>
+                                <button class="delete-button" onclick="delete_user({{ user.id }})">
+                                    &#x2716;
+                                </button>
+                            </td>
+                        <!-- </tr> -->
+                        <tr>
+                            <td colspan="4"><hr style="border: 1px solid #000;"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <!-- {% else %} -->
+            <!-- If user is not active, display only the header row and Add User button -->
+            <!-- <p>Add User.</p> -->
+        <!-- {% endif %} -->
+    <!-- </div> -->
+<!-- <script>
+    function addUser() {
+        // Redirect to the add_user view
+        window.location.href = "{% url 'add_user' %}";
+    }
+
+    // ... Other scripts ... -->
+
+    
+        <script>
+            function openAddUserForm() {
+                console.log('Opening Add User Form');
+                window.location.href = "{% url 'add_user' %}";
+            }
+            function delete_user(user_id) {
+                if (confirm('Are you sure you want to deactivate this user?')) {
+                    fetch(`/delete_user/${user_id}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({
+                            status: false
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            console.error('Failed to deactivate user.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            }
+        </script>
+    </div>
+{% endblock %}

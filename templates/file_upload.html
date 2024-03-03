@@ -1,0 +1,112 @@
+<!-- catalyst_count/templates/file_upload.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        body {
+            background-color: #f8f3f3; 
+            color: #fff; 
+        }
+
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 50px;
+        }
+
+        .upload-text {
+            color: #000; 
+            margin-bottom: 10px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .upload-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .file-input {
+            flex: 1;
+            height: 40px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        .file-input::placeholder {
+            color: #007bff;
+        }
+
+        .upload-button {
+            background-color: #007bff;
+            color: #fff; 
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .start-upload-button {
+            margin-top: 20px;
+        }
+
+        .upload-progress {
+            display: none;
+            color: #007bff; 
+            margin-top: 10px;
+        }
+        .messages-container {
+            width: 300px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+    </style>
+</head>
+<body>
+{% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="upload-container">
+        <label class="upload-text" for="id_your_file_field">Upload Data</label>
+        <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'file_upload' %}">
+            {% csrf_token %}
+            <div class="upload-box">
+                <input class="file-input" type="file" name="file" id="file" placeholder="Search File">
+                <button class="upload-button" type="submit">Start Upload</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+</body>
+</html>
